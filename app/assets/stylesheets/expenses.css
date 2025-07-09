@@ -1,0 +1,64 @@
+.expenses-table, .balances-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 0.9em;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.expenses-table thead tr, .balances-table thead tr {
+  background-color: #009879;
+  color: #ffffff;
+  text-align: left;
+}
+
+.expenses-table th, .expenses-table td,
+.balances-table th, .balances-table td {
+  padding: 12px 15px;
+}
+
+.expenses-table tbody tr, .balances-table tbody tr {
+  border-bottom: 1px solid #dddddd;
+}
+
+.expenses-table tbody tr:nth-of-type(even),
+.balances-table tbody tr:nth-of-type(even) {
+  background-color: #f3f3f3;
+}
+
+.expenses-table tbody tr:last-of-type,
+.balances-table tbody tr:last-of-type {
+  border-bottom: 2px solid #009879;
+}
+
+.expenses-table tfoot tr {
+  font-weight: bold;
+  background-color: #f3f3f3;
+}
+
+.balances-section {
+  margin-top: 30px;
+}
+
+.delete-button {
+  background-color: #ff4444;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.delete-button:hover {
+  background-color: #cc0000;
+}
+
+.expenses-table a, .balances-table a {
+  color: #009879;
+  text-decoration: none;
+  margin-right: 10px;
+}
+
+.expenses-table a:hover, .balances-table a:hover {
+  text-decoration: underline;
+} 

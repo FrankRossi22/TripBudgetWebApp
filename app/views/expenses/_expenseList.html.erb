@@ -1,0 +1,59 @@
+<h2>Expenses for <%= @trip.name %></h2>
+
+<table class="expenses-table">
+  <thead>
+    <tr>
+      <th>Description</th>
+      <th>Amount</th>
+      <th>Paid By</th>
+      <th>Split Between</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  
+  <tbody>
+    <% @expenses.each do |expense| %>
+      <tr>
+      <td><%= expense.description %></td>
+      <td>$<%= number_with_precision(expense.Amount, precision: 2) %> <%= expense.currency %></td>
+      <td>$<%= number_with_precision(expense.amount_in_usd, precision: 2) %> (USD)</td>
+      <td><%= expense.paid_by&.name || 'Unknown' %></td>
+        <td><%= expense.People.map(&:name).join(', ') %></td>
+        <td>
+          <%= link_to "Show", expense %>
+          <%= link_to "Edit", edit_expense_path(expense) %>
+          <%= button_to "Delete", expense, method: :delete, form: { class: "delete-button" } %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td><strong>Total Expenses (USD):</strong></td>
+      <td>$<%= number_with_precision(@expenses.sum { |expense| expense.amount_in_usd }, precision: 2) %></td>
+      <td colspan="3"></td>
+    </tr>
+  </tfoot>
+</table>
+
+<% if @expenses.any? %>
+  <div class="balances-section">
+    <h3>Net Balances</h3>
+    <table class="balances-table">
+      <thead>
+        <tr>
+          <th>Person</th>
+          <th>Net Balance</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @trip.people.each do |person| %>
+          <tr>
+            <td><%= person.name %></td>
+            <td>$<%= number_with_precision(person.net_balance(@trip), precision: 2) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>

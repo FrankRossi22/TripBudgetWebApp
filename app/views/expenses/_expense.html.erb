@@ -1,0 +1,52 @@
+<div id="<%= dom_id expense %>" class="card mb-4">
+  <div class="card-body">
+    <h1 class="card-title"><%= expense.description %></h1>
+    
+    <div class="row">
+      <div class="col-md-6">
+        <p class="mb-2">
+          <strong>Amount:</strong>
+          $<%= number_with_precision(expense.Amount, precision: 2) %> <%= expense.currency %>
+        </p>
+        <p class="mb-2">
+          <strong>Converted to USD:</strong>
+          $<%= number_with_precision(expense.amount_in_usd, precision: 2) %>
+        </p>
+
+        <p class="mb-2">
+          <strong>Category:</strong>
+          <%= expense.category %>
+        </p>
+        
+        <p class="mb-2">
+          <strong>Date:</strong>
+          <%= expense.date&.strftime('%b %d, %Y') %>
+        </p>
+
+        <p class="mb-2">
+          <strong>Paid By:</strong>
+          <%= expense.paid_by&.name || 'Unknown' %>
+        </p>
+      </div>
+      
+      <div class="col-md-6">
+        <% if expense.people.any? %>
+          <p class="mb-2">
+            <strong>Split Between:</strong>
+            <%= expense.people.map(&:name).join(', ') %>
+          </p>
+          
+          <p class="mb-2">
+            <strong>Per Person:</strong>
+            $<%= number_with_precision(expense.split_amount, precision: 2) %>
+          </p>
+        <% else %>
+          <p class="mb-2">
+            <strong>Split:</strong>
+            Not split (paid entirely by <%= expense.paid_by&.name || 'Unknown' %>)
+          </p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

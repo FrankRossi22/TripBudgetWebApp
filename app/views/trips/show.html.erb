@@ -1,0 +1,106 @@
+<p style="color: green"><%= notice %></p>
+<div class="show_trip_container">
+  <div class="show_trip_div">
+    <%= render @trip %>
+        
+    <div class="link_div">
+      <%= link_to "Edit this trip", edit_trip_path(@trip) %> |
+      <%= link_to "Add Expense", new_trip_expense_path(@trip) %> |
+      <%= link_to "Back to trips", trips_path %> |
+
+      <%= button_to "Destroy this trip", @trip, method: :delete, class: 'btn' %>
+    </div>
+  </div>
+
+  <div class="expenses_list">
+    <h2>Expenses for <%= @trip.name %></h2>
+    
+    <table class="expenses-table">
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Description</th>
+          <th>Date</th>
+          <th>Amount</th>
+          <th>Currency</th>
+          <th>Paid By</th>
+          <th>Split Between</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @trip.expenses.includes(:paid_by, :people).each do |expense| %>
+          <tr>
+            <td><%= expense.category %></td>
+            <td><%= expense.description %></td>
+            <td><%= expense.date&.strftime('%b %d, %Y') %></td>
+            <td>$<%= number_with_precision(expense.Amount, precision: 2) %></td>
+            <td><%= expense.currency %></td>
+            <td><%= expense.paid_by&.name || 'Unknown' %></td>
+            <td><%= expense.people.map(&:name).join(', ') %></td>
+            <td>
+              <%= link_to "Show", trip_expense_path(@trip, expense) %>
+              <%= link_to "Edit", edit_trip_expense_path(@trip, expense) %>
+              <%= button_to "Delete", trip_expense_path(@trip, expense), method: :delete, form: { class: "delete-button" } %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td><strong>Total Expenses (USD):</strong></td>
+          <td></td>
+          <td>$<%= number_with_precision(@trip.expenses.sum{ |expense| expense.amount_in_usd }, precision: 2) %></td>
+          <td colspan="3"></td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <% if @trip.expenses.any? %>
+      <div class="balances-section">
+        <h3>Net Balances</h3>
+        <table class="balances-table">
+          <thead>
+            <tr>
+              <th>Person</th>
+              <th>Net Balance</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @trip.people.each do |person| %>
+              <tr>
+                <td><%= person.name %></td>
+                <td>$<%= number_with_precision(person.net_balance(@trip), precision: 2) %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+
+        <h3 class="mt-4">How to Settle Debts</h3>
+        <% settlements = @trip.calculate_settlements %>
+        <% if settlements.any? %>
+          <table class="balances-table">
+            <thead>
+              <tr>
+                <th>From</th>
+                <th>To</th>
+                <th>Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% settlements.each do |settlement| %>
+                <tr>
+                  <td><%= settlement[:from].name %></td>
+                  <td><%= settlement[:to].name %></td>
+                  <td>$<%= number_with_precision(settlement[:amount], precision: 2) %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        <% else %>
+          <p class="alert alert-info">All debts are settled!</p>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>

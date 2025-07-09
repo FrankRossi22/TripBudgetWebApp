@@ -1,0 +1,48 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Trips" %>
+
+<h1>Trips</h1>
+
+<table class="table table-striped table-hover">
+  <thead class="table-dark">
+    <tr>
+      <th>Destination</th>
+      <th>Start Date</th>
+      <th>End Date</th>
+      <th>Participants</th>
+      <th class="text-center">Show</th>
+      <th class="text-center">Edit</th>
+      <th class="text-center">Expenses</th>
+      <th class="text-center">Delete</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @trips.each do |trip| %>
+      <tr>
+        <td><%= trip.destination %></td>
+        <td><%= trip.Start_Date.strftime('%b %d, %Y') %></td>
+        <td><%= trip.End_Date.strftime('%b %d, %Y') %></td>
+        <td>
+          <% if trip.people.any? %>
+            <%= trip.people.map(&:name).join(', ') %>
+          <% else %>
+            <span class="text-muted">No participants</span>
+          <% end %>
+        </td>
+        <td class="text-center"><%= link_to 'Show', trip, class: 'btn btn-sm btn-info' %></td>
+        <td class="text-center"><%= link_to 'Edit', edit_trip_path(trip), class: 'btn btn-sm btn-warning' %></td>
+        <td class="text-center"><%= link_to 'Add', new_trip_expense_path(trip), class: 'btn btn-sm btn-success' %></td>
+        <td class="text-center">
+          <%= button_to 'Delete', trip, 
+                method: :delete, 
+                form: { class: "d-inline" }, 
+                data: { confirm: 'Are you sure?' }, 
+                class: 'btn btn-sm btn-danger' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to "New trip", new_trip_path, class: 'btn btn-primary mt-3' %>

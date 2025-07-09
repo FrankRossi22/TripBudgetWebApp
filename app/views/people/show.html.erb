@@ -1,0 +1,48 @@
+<p style="color: green"><%= notice %></p>
+
+<div class="person-container">
+  <h1><%= @person.name %></h1>
+  
+  <div class="person-details">
+    <p><strong>Email:</strong> <%= @person.email %></p>
+    <p><strong>Member since:</strong> <%= @person.created_at.strftime('%B %d, %Y') %></p>
+  </div>
+
+  <h2 class="mt-4">Trips</h2>
+  <% if @person.trips.any? %>
+    <table class="table table-striped trips-table">
+      <thead>
+        <tr>
+          <th>Destination</th>
+          <th>Start Date</th>
+          <th>End Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @person.trips.each do |trip| %>
+          <tr>
+            <td><%= trip.destination %></td>
+            <td><%= trip.Start_Date.strftime('%b %d, %Y') %></td>
+            <td><%= trip.End_Date.strftime('%b %d, %Y') %></td>
+            <td>
+              <%= link_to 'View', trip, class: 'btn btn-sm btn-info' %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <div class="alert alert-info">
+      This person hasn't joined any trips yet.
+    </div>
+  <% end %>
+
+  <div class="actions mt-4">
+    <%= link_to "Edit Profile", edit_person_path(@person), class: "btn btn-warning" %> | 
+    <%= link_to "Back to All People", people_path, class: "btn btn-secondary" %> | 
+    <%= button_to "Delete Profile", @person, method: :delete, 
+          data: { confirm: "Are you sure you want to delete this person?" }, 
+          class: "btn btn-danger" %>
+  </div>
+</div>

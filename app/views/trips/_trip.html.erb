@@ -1,0 +1,32 @@
+<div id="<%= dom_id trip %>">
+  <h2 >
+     <strong>
+    <%=trip.name%>:
+    </strong>
+  </h2>
+  <p class="trip-detail">
+    <strong>You're going to </strong>
+    <%= trip.destination %>!
+  </p>
+  <p class="trip-detail">
+    <strong>Departing on:</strong>
+    <%= trip.Start_Date.strftime("%B %d, %Y") %>
+  </p>
+
+  <p class="trip-detail">
+    <strong>Returning on:</strong>
+    <%= trip.End_Date.strftime("%B %d, %Y") %>
+  </p>
+  <p class="trip-detail">
+    <strong>People Going:</strong>
+    <% if trip.people.any? %>
+      <ul class="participant-list">
+        <% trip.people.each do |person| %>
+          <li class="participant-item"><%= person.name %></li>
+        <% end %>
+      </ul>
+    <% else %>
+      <span class="no-participants">No participants assigned.</span>
+    <% end %>
+  </p>
+</div>

@@ -1,0 +1,93 @@
+/*
+ * This is a manifest file that'll be compiled into application.css.
+ *
+ * With Propshaft, assets are served efficiently without preprocessing steps. You can still include
+ * application-wide styles in this file, but keep in mind that CSS precedence will follow the standard
+ * cascading order, meaning styles declared later in the document or manifest will override earlier ones,
+ * depending on specificity.
+ *
+ * Consider organizing styles into separate files for maintainability.
+ */
+ body {
+	margin: 0;
+ }
+ .page-cont {
+    margin: 0 1em;
+}
+.mb-3, .selection {
+	margin: .8em 0em;
+}
+.btn, .button-to, .link_div > a {
+	font: bold .9em Arial;
+	text-decoration: none;
+	background-color: #EEEEEE;
+	color: #ffffff;
+	padding: .15em .45em;
+	border-top: 1px solid #d4d4d4;
+	border-right: 1px solid #272727;
+	border-bottom: 1px solid #272727;
+	border-left: 1px solid #d4d4d4;
+  }
+  form.button_to {
+	display: inline-block;
+  }
+.btn:hover {
+	cursor: pointer;
+}
+.table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-bottom: 20px;
+}
+
+.table th, .table td {
+	padding: 12px;
+	text-align: left;
+	border-bottom: 1px solid #ddd;
+}
+
+.table th {
+	background-color: #f8f9fa;
+	font-weight: bold;
+}
+
+.action-links {
+	white-space: nowrap;
+}
+
+.action-links .btn {
+	margin-right: 5px;
+	margin-bottom: 5px;
+}
+
+/*
+*Nav styling
+*/
+.header {
+	background-color: #f4f7f9;
+	padding: 10px 0;
+	text-align: left;
+	position: sticky;
+	top: 0;
+	left: 0;
+	width: 100%;
+  }
+  
+  .header-nav {
+	display: inline-block;
+  }
+  
+  .nav-link {
+	color: #101010;
+	font-size: 1.2rem;
+	font-family: 'Arial', sans-serif;
+	text-decoration: none;
+	margin: 0 15px;
+	padding: 5px 10px;
+	transition: color 0.3s ease, border-bottom 0.3s ease;
+  }
+  
+  .nav-link:hover {
+	color: #ffc107;
+	border-bottom: 2px solid #ffc107;
+  }

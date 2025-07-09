@@ -1,0 +1,45 @@
+<% content_for :page_specific_js do %>
+<%= javascript_include_tag 'quickSplit', 'data-turbo-track': 'reload', defer: false %>
+<% end %>
+<div class="container quickSplit-cont">
+    <h1>QuickSplit</h1>
+
+
+    
+    <form id="quickSplit-form">
+        <span>
+            <label>Bill Total:</label>
+            
+            <span class="input-box">
+                <span class="prefix">$</span>
+                <input id='amountBox' type='number' placeholder="Amount"/>
+            </span>
+        </span>
+        <br>
+        <span>
+            <label>Tip:</label>
+            <span class="input-box">
+                <span class="prefix">%</span>
+                <input class='tipInput' id='tipPercent' type='number' placeholder="0"/>
+            </span>
+            <span class="or">or</span>
+            <span class="input-box">
+                <span class="prefix">$</span>
+                 <input class='tipInput' id='tipDollars' type='number' placeholder="0"/>
+            </span>
+        </span>
+        <br>
+
+        <span>
+            <label>Number of people:</label>
+            <span class="input-box"><input id='numPeople' type='number' value="1"/></span>
+        </span>
+        <br>
+
+        <span>
+            <label>Amount Per Person:</label>
+            <span>$ </span><output type='number' id="quickSplit-output" value="0.00"></output>
+        </span>
+    </form>
+</div>
+

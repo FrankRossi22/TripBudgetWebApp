@@ -1,0 +1,53 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Trip Expenses" %>
+
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Expenses for <%= @trip.name %></h1>
+    <%= link_to "Add New Expense", new_trip_expense_path(@trip), class: "btn btn-primary" %>
+  </div>
+  <br>
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Description</th>
+          <th>Date</th>
+          <th>Amount</th>
+          <th>Paid By</th>
+          <th>Split Between</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @expenses.each do |expense| %>
+          <tr>
+            <td><%= expense.description %></td>
+            <td><%= expense.date&.strftime('%b %d, %Y') %></td>
+            <td>$<%= number_with_precision(expense.Amount, precision: 2) %></td>
+            <td><%= expense.paid_by&.name || 'Unknown' %></td>
+            <td><%= expense.people.map(&:name).join(', ') %></td>
+            <td>
+              <%= link_to "Show", trip_expense_path(@trip, expense), class: "btn btn-sm btn-info" %>
+              <%= link_to "Edit", edit_trip_expense_path(@trip, expense), class: "btn btn-sm btn-warning" %>
+              <%= button_to "Delete", trip_expense_path(@trip, expense), method: :delete, class: "btn btn-sm btn-danger", form: { style: 'display: inline-block' }, data: { confirm: 'Are you sure?' } %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td><strong>Total:</strong></td>
+          <td></td>
+          <td><strong>$<%= number_with_precision(@trip.expenses.sum(:Amount), precision: 2) %></strong></td>
+          <td colspan="3"></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <div class="mt-4">
+    <%= link_to "Back to Trip", trip_path(@trip), class: "btn btn-secondary" %>
+  </div>
+</div>

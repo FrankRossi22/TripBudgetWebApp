@@ -1,0 +1,35 @@
+
+
+#quickSplit-form > span{
+    display: inline-block;
+    margin: 1em 0em;
+}
+
+.tipInput {
+    width: 150px;
+
+}
+#quickSplit-form > span >  label{
+    font-size: 1.2em;
+}
+.input-box {
+    
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #a0a0a0;
+  border-radius: 4px;
+}
+.input-box input {
+  border: none;
+  outline: none;
+}
+
+.input-box:hover {
+  border-color: #4f7df3;
+}
+.input-box:focus-within {
+  border: .1em solid black;
+}
+.prefix {
+  padding-bottom: 1px;
+}

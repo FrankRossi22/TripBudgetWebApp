@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @expense %>
+
+<div>
+  <%= link_to "Edit this expense", edit_trip_expense_path(@trip, @expense), class: "btn btn-secondary" %> |
+  <%= link_to "Back to trip", trip_path(@trip), class: "btn btn-secondary" %> | 
+
+  <%= button_to "Destroy this expense", trip_expense_path(@trip, @expense), method: :delete, class: "btn btn-secondary" %>
+</div>

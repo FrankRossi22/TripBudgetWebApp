@@ -1,0 +1,192 @@
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-4" style="max-width: 400px;">
+      <%= form_with(model: [@trip, expense]) do |form| %>
+        <% if expense.errors.any? %>
+          <div style="color: red">
+            <h2><%= pluralize(expense.errors.count, "error") %> prohibited this expense from being saved:</h2>
+
+            <ul>
+              <% expense.errors.each do |error| %>
+                <li><%= error.full_message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <div class="mb-3">
+          <%= form.label :category, "Category", class: "form-label" %>
+          <%= form.select :category, 
+              options_for_select([
+                ['Food & Drinks', 'Food & Drinks'],
+                ['Transportation', 'Transportation'],
+                ['Accommodation', 'Accommodation'],
+                ['Activities', 'Activities'],
+                ['Shopping', 'Shopping'],
+                ['Other', 'Other']
+              ], expense.description),
+              { prompt: "Select a category" },
+              { class: "form-select", required: true } %>
+        </div>
+
+        <div class="mb-3">
+          <%= form.label :description, class: "form-label" %>
+          <%= form.text_field :description, class: "form-control" %>
+        </div>
+
+        <div class="mb-3">
+          <%= form.label :date, class: "form-label" %>
+          <%= form.date_field :date, class: "form-control", required: true %>
+        </div>
+
+        <div class="mb-3">
+          <%= form.label :Amount, class: "form-label" %>
+          <%= form.number_field :Amount, step: "0.01", class: "form-control" %>
+        </div>
+    
+        <div class="mb-3">
+  <%= form.label :currency, "Currency", class: "form-label" %>
+  <%= form.select :currency, 
+      options_for_select([['USD', 'USD'], ['CAD', 'CAD'], ['EUR', 'EUR'], ['GBP', 'GBP']], expense.currency || 'USD'),
+      { prompt: "Select a currency" },
+      { class: "form-select", required: true } %>
+</div>
+
+        <div class="mb-3">
+          <%= form.label :paid_by_id, "Paid By", class: "form-label" %>
+          <%= form.select :paid_by_id, 
+              options_from_collection_for_select(@available_people, :id, :name, expense.paid_by_id),
+              { prompt: "Select who paid" },
+              { class: "form-select select2-single", required: true } %>
+        </div>
+
+        <div class="mb-3">
+          <div class="form-check">
+            <%= form.check_box :split_payment, class: "form-check-input", id: "split_payment_checkbox" %>
+            <%= form.label :split_payment, "Split Payment?", class: "form-check-label" %>
+          </div>
+        </div>
+
+        <div class="mb-3" id="split_between_section" style="display: none;">
+          <%= form.label :person_ids, "Split Between", class: "form-label" %>
+          <%= form.select :person_ids,
+              options_from_collection_for_select(@available_people, :id, :name, expense.person_ids),
+              {},
+              { multiple: true, class: "form-select select2-multi" } %>
+        </div>
+
+        <div class="mb-3">
+          <%= form.submit class: "btn btn-primary" %>
+          <%= link_to "Cancel", trip_path(@trip), class: "btn btn-secondary ms-2" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<%# Add Select2 CSS and JS %>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+  function initializeSelect2() {
+    // Initialize Select2 for single select
+    $('.select2-single').select2({
+      theme: 'bootstrap-5',
+      width: '100%',
+      dropdownParent: $('.container')
+    });
+
+    // Initialize Select2 for multiple select
+    $('.select2-multi').select2({
+      theme: 'bootstrap-5',
+      width: '100%',
+      dropdownParent: $('.container'),
+      placeholder: 'Select people to split with'
+    });
+
+    // Handle split payment checkbox
+    const splitCheckbox = document.getElementById('split_payment_checkbox');
+    const splitSection = document.getElementById('split_between_section');
+    const paidBySelect = $('.select2-single');
+    const splitBetweenSelect = $('.select2-multi');
+    
+    // Function to update split between selection
+    function updateSplitBetween() {
+      const selectedPayer = paidBySelect.val();
+      if (selectedPayer) {
+        // Get current selections
+        let currentSelections = splitBetweenSelect.val() || [];
+        // Add payer if not already included
+        if (!currentSelections.includes(selectedPayer)) {
+          currentSelections.push(selectedPayer);
+          splitBetweenSelect.val(currentSelections).trigger('change');
+        }
+      }
+    }
+    
+    function toggleSplitSection() {
+      if (splitCheckbox.checked) {
+        splitSection.style.display = 'block';
+        updateSplitBetween();
+      } else {
+        splitSection.style.display = 'none';
+        splitBetweenSelect.val(null).trigger('change');
+      }
+    }
+
+    // Set initial state based on checkbox
+    if (splitCheckbox) {
+      toggleSplitSection();
+      splitCheckbox.addEventListener('change', toggleSplitSection);
+      
+      // Also update split between when paid by changes
+      paidBySelect.on('change', function() {
+        if (splitCheckbox.checked) {
+          updateSplitBetween();
+        }
+      });
+    }
+  }
+
+  // Run on regular page load
+  document.addEventListener("DOMContentLoaded", initializeSelect2);
+  
+  // Run on Turbolinks page load
+  document.addEventListener("turbo:load", initializeSelect2);
+  
+  // Clean up Select2 before Turbolinks caches the page
+  document.addEventListener("turbo:before-cache", function() {
+    $('.select2-single').select2('destroy');
+    $('.select2-multi').select2('destroy');
+  });
+</script>
+
+<style>
+  .select2-container {
+    width: 100% !important;
+  }
+  
+  .select2-selection--single {
+    height: 38px !important;
+    padding: 5px !important;
+    border: 1px solid #ced4da !important;
+    border-radius: 4px !important;
+  }
+
+  .select2-selection--multiple {
+    min-height: 38px !important;
+    border: 1px solid #ced4da !important;
+    border-radius: 4px !important;
+  }
+
+  .select2-container .select2-selection--multiple .select2-selection__rendered {
+    padding: 0 8px;
+  }
+
+  .select2-container .select2-selection--multiple .select2-selection__choice {
+    margin: 4px 4px;
+    padding: 2px 6px;
+  }
+</style>
