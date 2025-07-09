@@ -1,4 +1,5 @@
-# Project 6: Split The Bill
+# Class Project: Split The Bill
+## Written By: Frank Rossi, Mohammed Maalin, and Brandon McGuckin
 
 ## What this project does
 This Rails web app helps a group handle plan for expenses that may come up in a
